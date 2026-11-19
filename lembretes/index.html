@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0F6FA8">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Crazy Buddy">
+  <title>Crazy Buddy — Lembretes</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img src="icon.svg" alt="" width="32" height="32">
+      <div>
+        <h1>Crazy Buddy</h1>
+        <p id="status-sub">Lembretes cifrados ponta a ponta</p>
+      </div>
+    </div>
+    <button id="btn-sync" class="btn ghost small" type="button" hidden>Sincronizar</button>
+  </header>
+
+  <main class="shell">
+    <section id="unpaired-card" class="card" hidden>
+      <h2>Pareie com o seu computador</h2>
+      <p class="hint">
+        Abra o painel do <strong>Crazy Buddy</strong> no PC, vá em <strong>Configurações → Celular (lembretes por QR cifrado)</strong>,
+        clique em <strong>Gerar QR de pareamento</strong> e aponte a câmera do celular para o QR.
+      </p>
+      <p class="hint">Ou cole abaixo o link completo copiado do painel:</p>
+      <div class="row">
+        <input id="paste-url" type="url" placeholder="https://.../lembretes/#box=...&key=..." autocomplete="off">
+        <button id="btn-pair-url" class="btn" type="button">Conectar</button>
+      </div>
+    </section>
+
+    <section id="app-section" hidden>
+      <div class="card">
+        <h2 id="form-title">Novo lembrete</h2>
+        <form id="rem-form">
+          <input id="rem-id" type="hidden" value="">
+          <label class="field">
+            <span>Mensagem que o buddy vai falar</span>
+            <input id="rem-text" type="text" maxlength="200" required placeholder="Ex.: Tomar remédio, Ligar para o cliente...">
+          </label>
+          <div class="grid-2">
+            <label class="field">
+              <span>Quando avisar</span>
+              <select id="rem-mode">
+                <option value="daily">Todos os dias nos horários</option>
+                <option value="interval">A cada N minutos</option>
+                <option value="date">Em uma data e hora</option>
+              </select>
+            </label>
+            <label class="field">
+              <span id="rem-val-label">Horários (ex.: 09:00, 18:30)</span>
+              <input id="rem-val" type="text" required value="09:00">
+            </label>
+          </div>
+          <label id="rem-yearly-wrap" class="check-line" hidden>
+            <input id="rem-yearly" type="checkbox">
+            <span>Repetir todo ano nessa data</span>
+          </label>
+          <div class="row actions">
+            <button id="btn-save" class="btn" type="submit">Salvar lembrete</button>
+            <button id="btn-cancel" class="btn ghost" type="button" hidden>Cancelar edição</button>
+          </div>
+        </form>
+        <p id="msg-bar" class="msg" hidden></p>
+      </div>
+
+      <div class="card">
+        <div class="row between">
+          <h2>Seus lembretes</h2>
+          <span id="rem-count" class="badge">0</span>
+        </div>
+        <div id="rem-list" class="list"></div>
+      </div>
+
+      <div class="card muted-card">
+        <div class="row between">
+          <span id="box-info" class="hint"></span>
+          <button id="btn-unpair" class="btn small ghost" type="button">Desconectar aparelho</button>
+        </div>
+        <p class="hint">
+          Dica: no Safari (iPhone) toque em <strong>Compartilhar → Adicionar à Tela de Início</strong>;
+          no Chrome (Android) toque em <strong>⋮ → Adicionar à tela inicial</strong>.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
