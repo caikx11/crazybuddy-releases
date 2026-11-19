@@ -1,0 +1,17 @@
+{
+  "name": "Crazy Buddy — Lembretes",
+  "short_name": "Crazy Buddy",
+  "description": "Caixa de recados cifrada ponta a ponta do Crazy Buddy",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#FBFDFF",
+  "theme_color": "#0F6FA8",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
