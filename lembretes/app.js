@@ -3,6 +3,8 @@
 
 const STORAGE_KEY = "crazybuddy_box_v1";
 const TABLE = "crazybuddy_boxes";
+const DEFAULT_SUPABASE_URL = "https://mmxdwcpdtkcdlthohhkg.supabase.co";
+const DEFAULT_SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1teGR3Y3BkdGtjZGx0aG9oaGtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUxMjA5NzgsImV4cCI6MjExMDY5Njk3OH0.DCYcMMuj0XAtp142tNf5IDy4P8gllWDm2Jy8jhiDsOg";
 
 let creds = null;
 let state = { version: 1, updatedAtMs: 0, reminders: [], deleted: {} };
@@ -74,8 +76,8 @@ function parseHashFragment(hashStr) {
   return {
     boxId: box,
     keyB64: key,
-    supabaseUrl: (params.get("sb") || "").trim().replace(/\/+$/, ""),
-    supabaseAnon: (params.get("anon") || "").trim(),
+    supabaseUrl: (params.get("sb") || DEFAULT_SUPABASE_URL).trim().replace(/\/+$/, ""),
+    supabaseAnon: (params.get("anon") || DEFAULT_SUPABASE_ANON).trim(),
   };
 }
 
