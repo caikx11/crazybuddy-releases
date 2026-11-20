@@ -2,7 +2,6 @@
 // Usa WebCrypto nativo (AES-256-GCM) do Safari (iOS) e Chrome (Android), compatível com `crazybuddy-sync` em Rust.
 
 const STORAGE_KEY = "crazybuddy_box_v1";
-const TABLE = "crazybuddy_boxes";
 const DEFAULT_SUPABASE_URL = "https://mmxdwcpdtkcdlthohhkg.supabase.co";
 const DEFAULT_SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1teGR3Y3BkdGtjZGx0aG9oaGtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUxMjA5NzgsImV4cCI6MjExMDY5Njk3OH0.DCYcMMuj0XAtp142tNf5IDy4P8gllWDm2Jy8jhiDsOg";
 
@@ -128,13 +127,15 @@ function validateSchedule(mode, val) {
 
 async function pullFromSupabase() {
   if (!creds?.supabaseUrl || !creds?.supabaseAnon) return null;
-  const url = `${creds.supabaseUrl}/rest/v1/${TABLE}?box_id=eq.${encodeURIComponent(creds.boxId)}&select=box_id,ciphertext,updated_at`;
-  const res = await fetch(url, {
+  const res = await fetch(`${creds.supabaseUrl}/rest/v1/rpc/cb_get_box`, {
+    method: "POST",
     headers: {
       apikey: creds.supabaseAnon,
       Authorization: `Bearer ${creds.supabaseAnon}`,
+      "Content-Type": "application/json",
       Accept: "application/json",
     },
+    body: JSON.stringify({ p_box_id: creds.boxId }),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const rows = await res.json();
@@ -147,20 +148,14 @@ async function pushToSupabase() {
     throw new Error("A URL e a chave pública do Supabase não vieram no QR. Preencha no painel do PC e gere o QR novamente.");
   }
   const ciphertext = await encryptPayload(creds.keyB64, state);
-  const url = `${creds.supabaseUrl}/rest/v1/${TABLE}?on_conflict=box_id`;
-  const res = await fetch(url, {
+  const res = await fetch(`${creds.supabaseUrl}/rest/v1/rpc/cb_put_box`, {
     method: "POST",
     headers: {
       apikey: creds.supabaseAnon,
       Authorization: `Bearer ${creds.supabaseAnon}`,
       "Content-Type": "application/json",
-      Prefer: "resolution=merge-duplicates,return=minimal",
     },
-    body: JSON.stringify({
-      box_id: creds.boxId,
-      ciphertext,
-      updated_at: new Date().toISOString(),
-    }),
+    body: JSON.stringify({ p_box_id: creds.boxId, p_ciphertext: ciphertext }),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
 }
